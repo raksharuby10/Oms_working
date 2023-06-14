@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>   
+    <h1>Welcome , <%= @user_current.name %></h1>    
+    <p>
+      <% if @complaint.complaint_type == "concern" %>
+        Your complaint has been sent successfully to <%= @user_data.name %>,
+        your email is: <%= @user_current.email %>.
+      <% else %>
+      You appreciation has been sent successfully to <%= @user_data.name %>,
+      your email is: <%= @user_current.email %>.
+      <% end %>
+    </p>
+    <table class="table table-bordered table-responsive">
+      <thead style="padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        text-align: left !important;
+        background-color: #fd7e14 !important;
+        color: black !important;">
+        <th>Image</th>
+        <th>Title</th>
+        <th>Description</th>
+        <% if @complaint.complaint_type == "concern" %>
+          <th>Status</th>
+        <% end %>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border: 1px solid #ddd !important;
+        padding: 8px !important;"><% @complaint.pictures.each do |file| 
+                attachments[file.blob.filename.to_s] = {
+                  mime_type: file.blob.content_type,
+                  content: file.blob.download
+               } %> 
+               <%= image_tag attachments[file.blob.filename.to_s].url, style:'width:50px;height:50px;' %>
+             <% end  %>
+           </td>
+          <td style="border: 1px solid #ddd !important;
+        padding: 8px !important;"><%= @category_data.title %></td>
+          <td style="border: 1px solid #ddd !important;
+        padding: 8px !important;"><%= @complaint.description %></td>
+          <% if @complaint.complaint_type == "concern" %>
+            <td style="border: 1px solid #ddd !important;
+        padding: 8px !important;"><%= @complaint.status %></td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      To login to the site, just follow this link: <%= @url %>
+    </p>
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<style type="text/css">
+   .text-center{
+    /* other default style */
+    grid-row: 2/3;
+    grid-column: 2/3;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+    height: 650px;
+  }
+</style>
+<div class="card text-center" style="width: 40rem;background: #efa3631f;">
+	<%= image_tag @user.image,size: '50x400', class:"card-img-top" , alt:"..." %>
+    <div class="card-body">
+      <h5 class="card-title"><%= @user.name %></h5>
+      <p class="card-title"><%= @user.email %></p> 
+      <p class="card-title"><%= @user.mobile %></p> 
+      <p class="card-text"><%= @user.address %></p>
+      <%= link_to "Edit", edit_user_path(@user), class:"btn btn-dark" %>
+      <%= link_to "Home", users_path , class:"btn btn-dark"%>    
+    </div>
+</div>

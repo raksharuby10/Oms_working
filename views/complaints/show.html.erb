@@ -1,0 +1,56 @@
+<style>
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+</style>
+<%
+  user_id = @complaint.user_id 
+  user_data= User.find(user_id)
+  name = user_data.name
+  category_id = @complaint.category_id 
+  category_data= Category.find(category_id)
+  title = category_data.title 
+ 
+  if @complaint.reject_reason.present?
+      reject_reason = @complaint.reject_reason
+  else
+     reject_reason =  "-"
+  end
+%>
+<div class="card" style="width: 28rem;background: #efa3631f;">
+  <div class="row" style="width:100%">
+  <% if @complaint.pictures.attached?
+      @complaint.pictures.each do |image| %>  
+        <div class="column" style="width:33.3%">
+          <%= image_tag image,class:"card-img-top" , alt:"..." %>&nbsp;
+        </div>    
+      <% end 
+  else 
+     image_tag 'item_placeholder.png' ,class:"card-img-top" , alt:"..."
+  end %>
+</div>
+  <div class="card-body">
+    <p class="card-title">Name : <%= name %></p>
+    <p class="card-title">Title : <%= title %></p> 
+    <p class="card-title">Description : <%= @complaint.description %></p> 
+    <% if @complaint.complaint_type == "concern"  %>
+    <p class="card-text">Status : <%= @complaint.status %></p>
+    <p class="card-text">Reason : <%= @complaint.reject_reason %></p>
+    <% end %>
+    <%= link_to "Edit", edit_complaint_path(@complaint), class:"btn btn-dark" %>    
+    <%= link_to "Home", users_path , class:"btn btn-dark"%>    
+  </div>
+</div>

@@ -1,0 +1,25 @@
+</br>
+<%= link_to "New Category", new_category_path,class:"btn btn-dark"%>
+<%= link_to "Home", users_path ,class:"btn btn-dark"%></li>
+<div class="overflow-auto" style="height:600px;">
+   <table class="table table-bordered table-responsive"  style= "background-color: #efa3631f;">
+      <thead>      
+      <th>Title</th>     
+      <th>Description</th>     
+      <th>Action</th>
+     </thead>
+      <tbody>
+         <% @categories.each do |category| %>          
+         <tr>
+            <td><%= category.title  %></td>           
+            <td><%= category.description  %></td>           
+            <td><%= link_to 'edit',edit_category_path(category),class:"btn btn-dark"%> 
+               <%= link_to "View",category_path(category.id) , class:"btn btn-dark" %></br>
+               </br>
+               <%= button_to "Destroy", category_path(category.id), :method => :delete, data: { confirm: "Are you sure?" },  class:"btn btn-dark" %>
+            </td>
+         </tr> 
+         <% end %>
+      </tbody>
+   </table>
+</div>
