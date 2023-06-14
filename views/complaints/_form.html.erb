@@ -1,0 +1,59 @@
+<%=form_for @complaint, local: true  do |f| %>
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+    <%= collection_select(:complaint, :category_id, Category.all, :id, :title, {prompt: true}, {class: "form-control"}) %>
+    <% @complaint.errors.full_messages_for(:category_id).each do |message| %>
+        <div style="color: red"><%= message %></div>
+    <% end %>
+  </div>   
+	<% if @complaint.pictures.attached?
+	  @complaint.pictures.each do |image| %>
+      <span>
+        <%= image_tag image, :size => '100x100' %>      	    
+      </span> 
+    <% end %>        
+  <% end %>
+  <div class="mb-3">
+    <label class="form-label">Image</label>
+    <%= f.file_field :pictures, multiple: true , class:"form-control"%>
+    <% @complaint.errors.full_messages_for(:pictures).each do |message| %>
+        <div style="color: red"><%= message %></div>
+    <% end %>
+  </div>   
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <%= f.text_area :description, class:"form-control"%>
+    <% @complaint.errors.full_messages_for(:description).each do |message| %>
+        <div style="color: red"><%= message %></div>
+    <% end %>
+  </div>
+  <div class="mb-3">
+      <label class="form-label">Type</label>
+      <%= f.select :complaint_type, [["concern", "concern"],["appreciate", "appreciate"]], {}, { :class => 'form-control' }%> 
+      <% @complaint.errors.full_messages_for(:complaint_type).each do |message| %>
+        <div style="color: red"><%= message %></div>
+      <% end %>
+      
+  </div> 
+  <% if current_user.role == "admin" &&  (@complaint.status == "disapproved" ||  @complaint.status == "pending")%>
+    <div class="mb-3">
+      <label class="form-label">Reject reason</label>
+      <%= f.text_area :reject_reason, class:"form-control"%>
+      
+      
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <%= f.select :status, [["disapproved", "disapproved"],["approved", "approved"]], {selected: "disapproved"}, { :class => 'form-control' } %> 
+      <% @complaint.errors.full_messages_for(:status).each do |message| %>
+        <div style="color: red"><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    
+    <%= f.submit class:"btn btn-dark" %>
+   
+  </div>
+<% end %>

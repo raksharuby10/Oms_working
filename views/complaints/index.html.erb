@@ -1,0 +1,213 @@
+</br>
+<%= link_to "Home", users_path,class:"btn btn-dark" %>
+<% if current_user.role == "user" %>
+  <% if @data == "concern" %>
+    <%= link_to 'New Complaint',new_complaint_path(:complaint_type => "concern"),class:"btn btn-dark"%> </br>
+    <div class="overflow-auto" style="height:600px;">
+      <table class="table table-bordered table-responsive"  style= "background-color: #efa3631f;">
+        <thead>      
+          <th>Image</th>          
+          <th>Category Name</th>      
+          <th>Description</th>     
+          <th>Status</th>     
+          <th>Reject Reason</th>     
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% @complaints.each do |complaint| 
+              user_id = complaint.user_id 
+              user_data= User.find(user_id)
+              name = user_data.name
+              if user_id == current_user.id 
+                category_id = complaint.category_id 
+                category_data= Category.find(category_id)
+                title = category_data.title
+        		    if complaint.reject_reason.present?
+        		        reject_reason = complaint.reject_reason
+        		    else
+        		       reject_reason =  "-"
+        		    end
+                if complaint.complaint_type == "concern" 
+                %>
+                  <tr>
+                      <td>
+                        <% if complaint.pictures.attached?
+                          complaint.pictures.each do |image| %> 
+                            <span><%= image_tag image, :size => '100x100' %></span>
+                          <% end 
+                        else %>
+                            <span><%= image_tag 'item_placeholder.png' , size: '100x100' %></span>
+                        <% end %>                    
+                      </td>
+                      <td><%=  title%></td>
+                      <td><%=  complaint.description%></td>
+                      <td><%=  complaint.status%></td>
+                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=  reject_reason %></td>           
+                      <td><%= link_to 'edit',edit_complaint_path(complaint),class:"btn btn-dark"%> 
+                          <%= link_to "View",complaint_path(complaint.id),class:"btn btn-dark" %></br></br>
+                          <%= button_to "Destroy", complaint_path(complaint.id), :method => :delete, data: { confirm: "Are you sure?" },  class:"btn btn-dark" %>
+                      </td>
+                  </tr> 
+               <% end %>
+            <% end %>
+          <% end %>         
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <%= link_to 'Appreciate',new_complaint_path(:complaint_type => "appreciate"),class:"btn btn-dark"%> </br>
+    <div class="overflow-auto" style="height:600px;">
+      <table class="table table-bordered table-responsive"  style= "background-color: #efa3631f;">
+        <thead>      
+          <th>Image</th>           
+          <th>Category Name</th>      
+          <th>Description</th>         
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% @complaints.each do |complaint| 
+              user_id = complaint.user_id 
+              user_data= User.find(user_id)
+              name = user_data.name
+              if user_id == current_user.id 
+                category_id = complaint.category_id 
+                category_data= Category.find(category_id)
+                title = category_data.title
+                if complaint.reject_reason.present?
+                    reject_reason = complaint.reject_reason
+                else
+                   reject_reason =  "-"
+                end
+                if complaint.complaint_type == "appreciate" 
+                %>
+                  <tr>
+                      <td>
+                        <% if complaint.pictures.attached?
+                          complaint.pictures.each do |image| %> 
+                            <span><%= image_tag image, :size => '100x100' %></span>
+                          <% end 
+                        else %>
+                            <span><%= image_tag 'item_placeholder.png' , size: '100x100' %></span>
+                        <% end %>                    
+                      </td>
+                      
+                      <td><%=  title%></td>
+                      <td><%=  complaint.description%></td>           
+                      <td><%= link_to 'edit',edit_complaint_path(complaint),class:"btn btn-dark"%> 
+                          <%= link_to "View",complaint_path(complaint.id),class:"btn btn-dark" %></br></br>
+                          <%= button_to "Destroy", complaint_path(complaint.id), :method => :delete, data: { confirm: "Are you sure?" },  class:"btn btn-dark" %>
+                      </td>
+                  </tr> 
+               <% end %>
+            <% end %>
+          <% end %>         
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% else %>
+  <% if @data == "concern" %>
+      <div class="overflow-auto" style="height:600px;">
+        <table class="table table-bordered table-responsive"  style= "background-color: #efa3631f;overflow-y:auto;max-height: 100px;">
+        <thead>      
+          <th>Image</th>     
+          <th>User Name</th>      
+          <th>Category Name</th>      
+          <th>Description</th>     
+          <th>Status</th>     
+          <th>Reject Reason</th>     
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% @complaints.each do |complaint| %>
+              <% user_id = complaint.user_id 
+              user_data= User.find(user_id)
+              name = user_data.name
+              category_id = complaint.category_id 
+              category_data= Category.find(category_id)
+              title = category_data.title         
+              if complaint.reject_reason.present?
+                  reject_reason = complaint.reject_reason
+              else
+                 reject_reason =  "-"
+              end
+              if complaint.complaint_type == "concern"
+          %>
+              <tr>          
+                <td><% if complaint.pictures.attached?
+                        complaint.pictures.each do |image| %> 
+                          <span><%= image_tag image, :size => '100x100' %></span>
+                        <% end 
+                      else %>
+                        <span><%= image_tag 'item_placeholder.png' , size: '100x100' %></span>
+                    <% end %>                    
+                </td>
+                <td><%=  name %></td>
+                <td><%=  title%></td>
+                <td><%=  complaint.description%></td>
+                <td><%=  complaint.status%></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=  reject_reason %></td>
+                <td><%= link_to 'edit',edit_complaint_path(complaint),class:"btn btn-dark"%> 
+                    <%= link_to "View",complaint_path(complaint.id),class:"btn btn-dark" %></br></br><%= button_to "Destroy", complaint_path(complaint.id), :method => :delete, data: { confirm: "Are you sure?" },  class:"btn btn-dark" %>
+                     </br>                  
+                    <% if complaint.status == "pending" %>                    
+                          <% Complaint.statuses.keys.each do |status| %>
+                            <% if status != "pending" %>
+                              <%= button_to  status, change_status_path(complaint, status: status), method: :patch , class:"btn btn-dark"%></br>
+                            <% end %>
+                          <% end %>                 
+                    <% end %>
+                </td>
+              </tr> 
+            <% end %>       
+          <% end %>       
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="overflow-auto" style="height:600px;">
+      <table class="table table-bordered table-responsive"  style= "background-color: #efa3631f;overflow-y:auto;max-height: 100px;">
+        <thead>      
+          <th>Image</th>     
+          <th>User Name</th>      
+          <th>Category Name</th>      
+          <th>Description</th>         
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% @complaints.each do |complaint| %>
+              <% user_id = complaint.user_id 
+              user_data= User.find(user_id)
+              name = user_data.name
+              category_id = complaint.category_id 
+              category_data= Category.find(category_id)
+              title = category_data.title         
+              if complaint.reject_reason.present?
+                  reject_reason = complaint.reject_reason
+              else
+                 reject_reason =  "-"
+              end
+              if complaint.complaint_type == "appreciate"
+          %>
+              <tr>          
+                <td><% if complaint.pictures.attached?
+                        complaint.pictures.each do |image| %> 
+                          <span><%= image_tag image, :size => '100x100' %></span>
+                        <% end 
+                      else %>
+                        <span><%= image_tag 'item_placeholder.png' , size: '100x100' %></span>
+                    <% end %>                    
+                </td>
+                <td><%=  name %></td>
+                <td><%=  title%></td>
+                <td><%=  complaint.description%></td>
+                <td><%= link_to "View",complaint_path(complaint.id),class:"btn btn-dark" %></br></br><%= button_to "Destroy", complaint_path(complaint.id), :method => :delete, data: { confirm: "Are you sure?" },  class:"btn btn-dark" %>                
+                </td>
+              </tr> 
+            <% end %>       
+          <% end %>       
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% end %>    
